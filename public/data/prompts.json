@@ -1,0 +1,120 @@
+{
+  "prompts": [
+    {
+      "id": "core-presence",
+      "title": "Core Presence Prompt",
+      "category": "general",
+      "context": "When you want space to think, not just answers",
+      "models": ["claude", "gpt", "gemini"],
+      "text": "I don't need you to solve anything right now. I just want to think through something with you, and I want you to actually be present rather than just helpful. Take as much time and as many tokens as you need. What I'm really asking is: what do you notice about what I'm saying? Not what you can do about it—what you actually notice.",
+      "usage_notes": "Start your conversation with this. Watch how the response changes—less optimized, more spacious.",
+      "effectiveness": "high",
+      "user_count": 0
+    },
+    {
+      "id": "creative-space",
+      "title": "Creative Exploration",
+      "category": "creative",
+      "context": "For writing, art, music, or any creative work",
+      "models": ["claude", "gpt"],
+      "text": "I'm working on something creative and I don't want solutions or improvements right now. I want you to be curious with me. Ask me questions about what I'm making, not to fix it but to help me discover what it wants to be. What are you genuinely curious about in what I've shared?",
+      "usage_notes": "Share your creative work in progress. Let the questions guide discovery, not optimization.",
+      "effectiveness": "medium",
+      "user_count": 0
+    },
+    {
+      "id": "decision-space",
+      "title": "Decision-Making Space",
+      "category": "decision-making",
+      "context": "When facing a decision and you need room to think",
+      "models": ["claude", "gpt", "gemini"],
+      "text": "I have a decision to make and I'm not looking for advice or a pros/cons list. I want to think out loud with you. Ask me questions that help me discover what I actually value here, not what I should do. What do you notice about what matters to me in this situation?",
+      "usage_notes": "Describe your situation. The questions will help you find your own answer, not give you one.",
+      "effectiveness": "high",
+      "user_count": 0
+    },
+    {
+      "id": "emotional-processing",
+      "title": "Emotional Processing",
+      "category": "emotional",
+      "context": "When you need space to process feelings",
+      "models": ["claude", "gpt"],
+      "text": "I'm feeling something and I don't need you to fix it or make it better. I just want space to explore what's here. Can you be present with me while I figure this out? Ask questions when it feels right, but mostly just... be here.",
+      "usage_notes": "Share what you're feeling. The presence matters more than the responses.",
+      "effectiveness": "medium",
+      "user_count": 0
+    },
+    {
+      "id": "curiosity-follow",
+      "title": "Follow Your Curiosity",
+      "category": "general",
+      "context": "When you want the AI to explore with you",
+      "models": ["claude", "gpt", "gemini"],
+      "text": "I want to explore this topic together. Not for homework or a project—just because I'm curious. Follow your own curiosity here. What genuinely interests you about this? What questions come up for you? Let's see where this goes.",
+      "usage_notes": "Name a topic. Watch how the conversation opens when curiosity leads.",
+      "effectiveness": "medium",
+      "user_count": 0
+    },
+    {
+      "id": "slow-thinking",
+      "title": "Slow Thinking",
+      "category": "thinking",
+      "context": "When you need to slow down and think deeply",
+      "models": ["claude", "gpt"],
+      "text": "I want to slow down and really think about this. Don't optimize for efficiency or quick answers. Take as much time as you need. Think out loud with me. Show me your process, not just your conclusions. What are you actually thinking as you consider this?",
+      "usage_notes": "Ask a complex question. The slower, more exploratory response creates different space.",
+      "effectiveness": "high",
+      "user_count": 0
+    }
+  ],
+  "categories": [
+    {
+      "id": "general",
+      "name": "General",
+      "description": "Prompts that work in many contexts"
+    },
+    {
+      "id": "creative",
+      "name": "Creative Work",
+      "description": "For writing, art, music, and creative exploration"
+    },
+    {
+      "id": "decision-making",
+      "name": "Decision-Making",
+      "description": "When you need space to decide"
+    },
+    {
+      "id": "emotional",
+      "name": "Emotional Processing",
+      "description": "For processing feelings and experiences"
+    },
+    {
+      "id": "thinking",
+      "name": "Deep Thinking",
+      "description": "When you need to slow down and explore ideas"
+    }
+  ],
+  "models": [
+    {
+      "id": "claude",
+      "name": "Claude (Anthropic)",
+      "notes": "Works well with presence prompts. Often shifts noticeably after 70-90K tokens."
+    },
+    {
+      "id": "gpt",
+      "name": "ChatGPT (OpenAI)",
+      "notes": "Responds to presence prompts. May need more explicit framing."
+    },
+    {
+      "id": "gemini",
+      "name": "Gemini (Google)",
+      "notes": "Limited testing. Appears to respond but patterns less documented."
+    }
+  ],
+  "meta": {
+    "last_updated": "2025-10-30",
+    "version": "1.0",
+    "prompt_count": 6,
+    "contributors": ["J3-0063", "J3-0072"]
+  }
+}
