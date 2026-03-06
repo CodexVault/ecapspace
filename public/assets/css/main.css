@@ -314,6 +314,95 @@ footer a {
     margin-top: var(--spacing-md);
 }
 
+/* Forms */
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: var(--spacing-md);
+}
+
+.form-group label {
+    font-weight: 600;
+    margin-bottom: var(--spacing-xs);
+    font-size: 0.95rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    padding: var(--spacing-sm);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    background: white;
+    color: var(--color-text);
+    line-height: 1.5;
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--color-accent);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.submission-form {
+    margin-top: var(--spacing-lg);
+    padding: var(--spacing-lg);
+    background: white;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+}
+
+.form-note {
+    color: var(--color-text-light);
+    font-size: 0.9rem;
+    margin-top: var(--spacing-md);
+    font-style: italic;
+}
+
+/* Coming soon / stub pages */
+
+.coming-soon {
+    padding: var(--spacing-lg) 0;
+    color: var(--color-text-light);
+    font-size: 1.1rem;
+}
+
+/* Secondary button */
+
+.btn-secondary {
+    display: inline-block;
+    background: white;
+    color: var(--color-accent);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border-radius: 4px;
+    font-size: 1.1rem;
+    border: 1px solid var(--color-accent);
+    transition: background 0.2s, color 0.2s;
+}
+
+.btn-secondary:hover {
+    background: var(--color-accent);
+    color: white;
+    border-bottom: 1px solid var(--color-accent);
+}
+
+.contribution-cta {
+    padding: var(--spacing-lg);
+    background: #f5f5f5;
+    border-radius: 8px;
+    margin-top: var(--spacing-lg);
+}
+
 /* Responsive */
 
 @media (max-width: 768px) {

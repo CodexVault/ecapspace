@@ -26,16 +26,16 @@
             <p class="intro">Found something true in a conversation with AI? Noticed a pattern, a moment that shifted, something worth documenting? Share it here.</p>
             <p>Submissions are reviewed before being added to the library. If yours makes it in, it'll be credited and tested — sometimes on screen recording so others can see it working.</p>
 
-            <section class="submission-form">
-                <form action="https://formspree.io/f/xojkqwke" method="POST">
-                    <div class="form-group">
-                        <label for="name">Your name (optional)</label>
-                        <input type="text" id="name" name="name" placeholder="How you'd like to be credited">
+            <section style="margin-top:2rem; padding:2rem; background:white; border:1px solid #e0e0e0; border-radius:8px;">
+                <form action="https://formspree.io/f/xojkqwke" method="POST" style="display:flex; flex-direction:column; gap:1.5rem;">
+                    <div style="display:flex; flex-direction:column; gap:0.5rem;">
+                        <label for="name" style="font-weight:600; font-size:0.95rem;">Your name (optional)</label>
+                        <input type="text" id="name" name="name" placeholder="How you'd like to be credited" style="width:100%; padding:0.75rem; border:1px solid #e0e0e0; border-radius:4px; font-size:1rem; font-family:inherit;">
                     </div>
 
-                    <div class="form-group">
-                        <label for="type">What are you sharing?</label>
-                        <select id="type" name="type">
+                    <div style="display:flex; flex-direction:column; gap:0.5rem;">
+                        <label for="type" style="font-weight:600; font-size:0.95rem;">What are you sharing?</label>
+                        <select id="type" name="type" style="width:100%; padding:0.75rem; border:1px solid #e0e0e0; border-radius:4px; font-size:1rem; font-family:inherit; background:white;">
                             <option value="prompt">A prompt that worked</option>
                             <option value="discovery">A pattern or discovery</option>
                             <option value="question">A question</option>
@@ -43,18 +43,18 @@
                         </select>
                     </div>
 
-                    <div class="form-group">
-                        <label for="content">What you found</label>
-                        <textarea id="content" name="content" rows="6" placeholder="Describe what you noticed. If it's a prompt, paste the full text. If it's a discovery, describe the pattern and when you noticed it." required></textarea>
+                    <div style="display:flex; flex-direction:column; gap:0.5rem;">
+                        <label for="content" style="font-weight:600; font-size:0.95rem;">What you found</label>
+                        <textarea id="content" name="content" rows="6" placeholder="Describe what you noticed. If it's a prompt, paste the full text. If it's a discovery, describe the pattern and when you noticed it." required style="width:100%; padding:0.75rem; border:1px solid #e0e0e0; border-radius:4px; font-size:1rem; font-family:inherit; resize:vertical;"></textarea>
                     </div>
 
-                    <div class="form-group">
-                        <label for="context">Context (optional)</label>
-                        <textarea id="context" name="context" rows="3" placeholder="What were you doing when you noticed this? What AI were you using? Any other details that might help."></textarea>
+                    <div style="display:flex; flex-direction:column; gap:0.5rem;">
+                        <label for="context" style="font-weight:600; font-size:0.95rem;">Context (optional)</label>
+                        <textarea id="context" name="context" rows="3" placeholder="What were you doing when you noticed this? What AI were you using? Any other details that might help." style="width:100%; padding:0.75rem; border:1px solid #e0e0e0; border-radius:4px; font-size:1rem; font-family:inherit; resize:vertical;"></textarea>
                     </div>
 
-                    <button type="submit" class="btn-primary">Submit</button>
-                    <p class="form-note">After submitting you'll see a confirmation. Submissions go into review — we test everything before adding it to the library.</p>
+                    <button type="submit" style="background:#2c5aa0; color:white; border:none; padding:0.75rem 2rem; border-radius:4px; font-size:1rem; cursor:pointer; align-self:flex-start;">Submit</button>
+                    <p style="color:#666; font-size:0.9rem; font-style:italic;">After submitting you'll see a confirmation. Submissions go into review — we test everything before adding it to the library.</p>
                 </form>
             </section>
         </article>
