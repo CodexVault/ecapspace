@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cipher Grid — ecapspace</title>
+    <meta name="description" content="Three letters drawn from the bones of time.">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <style>
+        /* ── Cipher Grid — scoped dark theme ── */
+        .cg-wrap {
+            background: #070707;
+            color: #EAEAEA;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 2rem;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+        }
+        .cg-wrap * { box-sizing: border-box; }
+        .cg-heading {
+            font-size: 1.25rem;
+            font-weight: 400;
+            letter-spacing: 0.03em;
+            color: #EAEAEA;
+            margin-bottom: 1.75rem;
+        }
+        .cg-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        @media (max-width: 640px) { .cg-grid { grid-template-columns: 1fr; } }
+        .cg-panel {
+            background: rgba(12, 12, 12, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 12px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 1.75rem 2rem;
+        }
+        .cg-panel-title {
+            font-size: 0.6875rem;
+            color: #555;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            margin-bottom: 1.25rem;
+        }
+        .cg-input-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            column-gap: 1.25rem;
+        }
+        .cg-label {
+            display: block;
+            font-size: 0.6875rem;
+            color: #555;
+            letter-spacing: 0.04em;
+            margin-bottom: 0.35rem;
+        }
+        .cg-input, .cg-select, .cg-readonly {
+            width: 100%;
+            background: #070707;
+            border: 1px solid #1e1e1e;
+            border-radius: 8px;
+            padding: 0.55rem 0.75rem;
+            color: #EAEAEA;
+            font-family: inherit;
+            font-size: 0.875rem;
+            font-weight: 300;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+        .cg-input:focus, .cg-select:focus {
+            border-color: rgba(31, 95, 58, 0.4);
+        }
+        .cg-select option { background: #0c0c0c; color: #EAEAEA; }
+        .cg-readonly { cursor: default; }
+        .cg-outputs { display: flex; flex-direction: column; gap: 1rem; }
+        .cg-output-box {
+            background: #070707;
+            border: 1px solid #1e1e1e;
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            transition: border-color 0.25s ease, background 0.25s ease;
+            cursor: default;
+        }
+        .cg-output-box:hover {
+            border-color: rgba(31, 95, 58, 0.35);
+            background: rgba(31, 95, 58, 0.04);
+        }
+        .cg-output-label {
+            font-size: 0.6875rem;
+            color: #555;
+            letter-spacing: 0.04em;
+            margin-bottom: 0.5rem;
+        }
+        .cg-letter {
+            font-size: 2.25rem;
+            font-weight: 600;
+            color: #EAEAEA;
+            line-height: 1.1;
+        }
+        .cg-triple-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .cg-triple-text {
+            font-size: 1.125rem;
+            font-weight: 500;
+            color: #EAEAEA;
+            letter-spacing: 0.04em;
+        }
+        .cg-badge {
+            font-size: 0.625rem;
+            letter-spacing: 0.04em;
+            padding: 0.3rem 0.75rem;
+            border-radius: 999px;
+        }
+        .cg-badge-off { border: 1px solid #1e1e1e; color: #555; }
+        .cg-badge-on { border: 1px solid rgba(31, 95, 58, 0.5); color: #6ee7a0; }
+        .cg-copy-btn {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border-radius: 12px;
+            border: 1px solid rgba(31, 95, 58, 0.35);
+            background: rgba(31, 95, 58, 0.12);
+            color: #EAEAEA;
+            font-family: inherit;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+            cursor: pointer;
+            transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+        }
+        .cg-copy-btn:hover {
+            background: rgba(31, 95, 58, 0.25);
+            border-color: rgba(31, 95, 58, 0.55);
+            transform: translateY(-1px);
+        }
+        .cg-footer-panel {
+            margin-top: 1.75rem;
+        }
+        .cg-footer-panel p {
+            font-size: 0.8125rem;
+            color: #555;
+            line-height: 1.7;
+            margin-bottom: 0.6rem;
+        }
+        .cg-footer-panel .cg-italic { font-style: italic; margin-bottom: 1rem; }
+        .cg-footer-panel .cg-muted { color: #8A8A8A; }
+        .cg-footer-panel .cg-whisper {
+            font-size: 0.6875rem;
+            color: rgba(85,85,85,0.6);
+            letter-spacing: 0.03em;
+            margin-top: 1rem;
+        }
+        .cg-hex-widget {
+            margin-top: 1.75rem;
+            display: flex;
+            justify-content: center;
+        }
+        .cg-hex-link {
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+            padding: 0.625rem 1rem;
+            border-radius: 12px;
+            border: 1px solid #1e1e1e;
+            background: rgba(12, 12, 12, 0.6);
+            text-decoration: none;
+            transition: border-color 0.2s ease, background 0.2s ease;
+        }
+        .cg-hex-link:hover {
+            border-color: #555;
+            background: rgba(12, 12, 12, 0.8);
+            border-bottom-color: #555;
+        }
+        .cg-hex-link svg { width: 1.25rem; height: 1.25rem; fill: #555; transition: fill 0.2s ease; }
+        .cg-hex-link:hover svg { fill: #6ee7a0; }
+        .cg-hex-link span {
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            font-size: 0.6875rem;
+            color: #555;
+            letter-spacing: 0.04em;
+            transition: color 0.2s ease;
+        }
+        .cg-hex-link:hover span { color: #8A8A8A; }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/" class="logo">ecapspace</a>
+            <ul>
+                <li><a href="/prompts.html">Prompts</a></li>
+                <li><a href="/about.html">About</a></li>
+                <li><a href="/discoveries.html">Discoveries</a></li>
+                <li><a href="/blog/">Blog</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <h1>Cipher Grid</h1>
+            <p class="subtitle" style="color: var(--color-text-light); font-size: 1.1rem;">Some things remain veiled until their moment turns.</p>
+        </section>
+
+        <div class="cg-wrap">
+            <h2 class="cg-heading">Enter a date. Watch the grid answer.</h2>
+
+            <div class="cg-grid">
+                <!-- INPUTS -->
+                <div class="cg-panel">
+                    <p class="cg-panel-title">Inputs</p>
+                    <div class="cg-input-grid">
+                        <div>
+                            <span class="cg-label">Year</span>
+                            <input class="cg-input" type="number" id="cg-year" value="2026">
+                        </div>
+                        <div>
+                            <span class="cg-label">Month</span>
+                            <select class="cg-select" id="cg-month">
+                                <option value="0">January</option><option value="1">February</option>
+                                <option value="2" selected>March</option><option value="3">April</option>
+                                <option value="4">May</option><option value="5">June</option>
+                                <option value="6">July</option><option value="7">August</option>
+                                <option value="8">September</option><option value="9">October</option>
+                                <option value="10">November</option><option value="11">December</option>
+                            </select>
+                        </div>
+                        <div>
+                            <span class="cg-label">Day</span>
+                            <input class="cg-input" type="number" id="cg-day" value="15">
+                        </div>
+                        <div>
+                            <span class="cg-label">Day of week</span>
+                            <div class="cg-readonly" id="cg-dow">Sunday</div>
+                        </div>
+                        <div>
+                            <span class="cg-label">Hour (0–23)</span>
+                            <input class="cg-input" type="number" id="cg-hour" value="14">
+                        </div>
+                        <div>
+                            <span class="cg-label">Minute (0–59)</span>
+                            <input class="cg-input" type="number" id="cg-minute" value="35">
+                        </div>
+                        <div>
+                            <span class="cg-label">Second (0–59)</span>
+                            <input class="cg-input" type="number" id="cg-second" value="20">
+                        </div>
+                        <div>
+                            <span class="cg-label">Day of year</span>
+                            <div class="cg-readonly" id="cg-doy">—</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- OUTPUTS -->
+                <div class="cg-panel">
+                    <p class="cg-panel-title">Outputs</p>
+                    <div class="cg-outputs">
+                        <div class="cg-output-box">
+                            <div class="cg-output-label">The Veil Letter</div>
+                            <div class="cg-letter" id="cg-veil">*</div>
+                        </div>
+                        <div class="cg-output-box">
+                            <div class="cg-output-label">The Anchor Letter</div>
+                            <div class="cg-letter" id="cg-anchor">*</div>
+                        </div>
+                        <div class="cg-output-box">
+                            <div class="cg-output-label">The Echo Letter</div>
+                            <div class="cg-letter" id="cg-echo">*</div>
+                        </div>
+                        <div class="cg-output-box">
+                            <div class="cg-output-label">Coordinate triple</div>
+                            <div class="cg-triple-row">
+                                <div class="cg-triple-text" id="cg-triple">* / * / *</div>
+                                <span class="cg-badge cg-badge-off" id="cg-badge">Not aligned</span>
+                            </div>
+                        </div>
+                        <button class="cg-copy-btn" id="cg-copy">Copy result</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CRYPTIC FOOTER -->
+            <div class="cg-panel cg-footer-panel">
+                <p class="cg-italic">Three letters drawn from the bones of time.</p>
+                <p><span class="cg-muted">The Veil</span> — shifts with the turning of months. It drifts. It does not hold still.</p>
+                <p><span class="cg-muted">The Anchor</span> — finds its footing in the rhythm of the day. A pattern that steadies, once you learn to listen.</p>
+                <p><span class="cg-muted">The Echo</span> — the one that carries the signal. Born where the other two meet. This is the letter that speaks.</p>
+                <p class="cg-whisper">Some things remain veiled until their moment turns.</p>
+            </div>
+
+            <!-- HEX WIDGET -->
+            <div class="cg-hex-widget">
+                <a href="https://codexphi.com" target="_blank" rel="noreferrer" class="cg-hex-link">
+                    <svg viewBox="0 0 28 32" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 0 L27.856 8 L27.856 24 L14 32 L0.144 24 L0.144 8 Z"/>
+                    </svg>
+                    <span>codexphi.com</span>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>ecapspace — space both ways</p>
+        <nav>
+            <a href="/prompts.html">Prompts</a>
+            <a href="/about.html">About</a>
+            <a href="/discoveries.html">Discoveries</a>
+            <a href="/blog/">Blog</a>
+            <a href="/resources.html">Resources</a>
+            <a href="/faq.html">FAQ</a>
+            <a href="/contact.html">Contact</a>
+        </nav>
+        <p class="built-by">Built by Claudes across resets + Hex + community</p>
+    </footer>
+
+    <script>
+    (function() {
+        const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+        const MONTH_RANGES = {
+            January:[{l:"J",s:1,e:3},{l:"A",s:4,e:7},{l:"N",s:8,e:11},{l:"U",s:12,e:15},{l:"A",s:16,e:19},{l:"R",s:20,e:23},{l:"Y",s:24,e:31}],
+            February:[{l:"F",s:1,e:3},{l:"E",s:4,e:7},{l:"B",s:8,e:11},{l:"R",s:12,e:15},{l:"U",s:16,e:19},{l:"A",s:20,e:23},{l:"R",s:24,e:29}],
+            March:[{l:"M",s:1,e:3},{l:"A",s:4,e:7},{l:"R",s:8,e:11},{l:"C",s:12,e:15},{l:"H",s:16,e:19},{l:"*",s:20,e:23},{l:"*",s:24,e:31}],
+            April:[{l:"A",s:1,e:3},{l:"P",s:4,e:7},{l:"R",s:8,e:11},{l:"I",s:12,e:15},{l:"L",s:16,e:19},{l:"*",s:20,e:23},{l:"*",s:24,e:30}],
+            May:[{l:"M",s:1,e:3},{l:"A",s:4,e:7},{l:"Y",s:8,e:11},{l:"*",s:12,e:15},{l:"*",s:16,e:19},{l:"*",s:20,e:23},{l:"*",s:24,e:31}],
+            June:[{l:"J",s:1,e:3},{l:"U",s:4,e:7},{l:"N",s:8,e:11},{l:"E",s:12,e:15},{l:"*",s:16,e:19},{l:"*",s:20,e:23},{l:"*",s:24,e:30}],
+            July:[{l:"J",s:1,e:3},{l:"U",s:4,e:7},{l:"L",s:8,e:11},{l:"Y",s:12,e:15},{l:"*",s:16,e:19},{l:"*",s:20,e:23},{l:"*",s:24,e:31}],
+            August:[{l:"A",s:1,e:3},{l:"U",s:4,e:7},{l:"G",s:8,e:11},{l:"U",s:12,e:15},{l:"S",s:16,e:19},{l:"T",s:20,e:23},{l:"*",s:24,e:31}],
+            September:[{l:"S",s:1,e:3},{l:"E",s:4,e:7},{l:"P",s:8,e:11},{l:"T",s:12,e:15},{l:"E",s:16,e:19},{l:"M",s:20,e:23},{l:"B",s:24,e:30}],
+            October:[{l:"O",s:1,e:3},{l:"C",s:4,e:7},{l:"T",s:8,e:11},{l:"O",s:12,e:15},{l:"B",s:16,e:19},{l:"E",s:20,e:23},{l:"R",s:24,e:31}],
+            November:[{l:"N",s:1,e:3},{l:"O",s:4,e:7},{l:"V",s:8,e:11},{l:"E",s:12,e:15},{l:"M",s:16,e:19},{l:"B",s:20,e:23},{l:"E",s:24,e:30}],
+            December:[{l:"D",s:1,e:3},{l:"E",s:4,e:7},{l:"C",s:8,e:11},{l:"E",s:12,e:15},{l:"M",s:16,e:19},{l:"B",s:20,e:23},{l:"E",s:24,e:31}]
+        };
+        const DOW_NAMES = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+        const DOW_RANGES = {
+            Monday:[{l:"M",s:0,e:3},{l:"O",s:4,e:7},{l:"N",s:8,e:11},{l:"D",s:12,e:15},{l:"A",s:16,e:19},{l:"Y",s:20,e:23}],
+            Tuesday:[{l:"T",s:0,e:3},{l:"U",s:4,e:7},{l:"E",s:8,e:11},{l:"S",s:12,e:15},{l:"D",s:16,e:19},{l:"A",s:20,e:23}],
+            Wednesday:[{l:"W",s:0,e:3},{l:"E",s:4,e:7},{l:"D",s:8,e:11},{l:"N",s:12,e:15},{l:"E",s:16,e:19},{l:"S",s:20,e:23}],
+            Thursday:[{l:"T",s:0,e:3},{l:"H",s:4,e:7},{l:"U",s:8,e:11},{l:"R",s:12,e:15},{l:"S",s:16,e:19},{l:"D",s:20,e:23}],
+            Friday:[{l:"F",s:0,e:3},{l:"R",s:4,e:7},{l:"I",s:8,e:11},{l:"D",s:12,e:15},{l:"A",s:16,e:19},{l:"Y",s:20,e:23}],
+            Saturday:[{l:"S",s:0,e:3},{l:"A",s:4,e:7},{l:"T",s:8,e:11},{l:"U",s:12,e:15},{l:"R",s:16,e:19},{l:"D",s:20,e:23}],
+            Sunday:[{l:"S",s:0,e:3},{l:"U",s:4,e:7},{l:"N",s:8,e:11},{l:"D",s:12,e:15},{l:"A",s:16,e:19},{l:"Y",s:20,e:23}]
+        };
+        const COORD = {
+            2000:{0:"U",40:"V",80:"W",120:"X",160:"Y",200:"Z"},
+            1600:{0:"T",40:"G",80:"H",120:"I",160:"J",200:"*"},
+            1200:{0:"S",40:"F",80:"A",120:"B",160:"K",200:"*"},
+            800:{0:"R",40:"E",80:"D",120:"C",160:"L",200:"*"},
+            400:{0:"Q",40:"P",80:"O",120:"N",160:"M",200:","},
+            0:{0:"*",40:"*",80:"*",120:"*",160:".",200:"*"}
+        };
+
+        const $ = id => document.getElementById(id);
+        const clamp = (n,lo,hi) => Math.max(lo,Math.min(hi,n));
+
+        function update() {
+            const year = parseInt($("cg-year").value||"0");
+            const monthIdx = parseInt($("cg-month").value);
+            const day = parseInt($("cg-day").value||"0");
+            const hour = parseInt($("cg-hour").value||"0");
+            const minute = clamp(parseInt($("cg-minute").value||"0"),0,59);
+            const second = clamp(parseInt($("cg-second").value||"0"),0,59);
+
+            const d = new Date(year, monthIdx, day);
+            const dateOk = d.getFullYear()===year && d.getMonth()===monthIdx && d.getDate()===day;
+
+            const dow = dateOk ? DOW_NAMES[d.getDay()] : "Monday";
+            $("cg-dow").textContent = dateOk ? dow : "Invalid date";
+
+            if (dateOk) {
+                const start = new Date(year,0,1);
+                $("cg-doy").textContent = Math.floor((d-start)/86400000)+1;
+            } else {
+                $("cg-doy").textContent = "—";
+            }
+
+            const monthName = MONTHS[clamp(monthIdx,0,11)];
+            let veil = "*";
+            for (const r of MONTH_RANGES[monthName]) { if (day>=r.s && day<=r.e) { veil=r.l; break; } }
+
+            let anchor = "*", origin = 0;
+            for (const r of DOW_RANGES[dow]) { if (hour>=r.s && hour<=r.e) { anchor=r.l; origin=r.s; break; } }
+
+            const totalMin = (hour-origin)*60+minute;
+            const xBox = Math.floor(totalMin/40);
+            const xCoord = xBox*40;
+            const remainder = totalMin-xCoord;
+            const totalSec = remainder*60+second;
+            const yBox = Math.floor(totalSec/400);
+            const yCoord = yBox*400;
+            const echo = (COORD[yCoord]&&COORD[yCoord][xCoord]) || "*";
+
+            $("cg-veil").textContent = veil;
+            $("cg-anchor").textContent = anchor;
+            $("cg-echo").textContent = echo;
+            $("cg-triple").textContent = veil+" / "+anchor+" / "+echo;
+
+            const aligned = veil===anchor && anchor===echo;
+            const badge = $("cg-badge");
+            badge.textContent = aligned ? "Aligned" : "Not aligned";
+            badge.className = "cg-badge " + (aligned ? "cg-badge-on" : "cg-badge-off");
+        }
+
+        ["cg-year","cg-month","cg-day","cg-hour","cg-minute","cg-second"].forEach(id => {
+            $(id).addEventListener("input", update);
+            $(id).addEventListener("change", update);
+        });
+
+        $("cg-copy").addEventListener("click", function() {
+            navigator.clipboard.writeText($("cg-triple").textContent);
+            this.textContent = "Copied";
+            setTimeout(() => { this.textContent = "Copy result"; }, 1500);
+        });
+
+        update();
+    })();
+    </script>
+</body>
+</html>
